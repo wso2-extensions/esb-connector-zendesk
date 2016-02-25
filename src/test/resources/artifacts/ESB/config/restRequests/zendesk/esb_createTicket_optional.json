@@ -1,0 +1,31 @@
+{
+  "username": "%s(username)",
+  "apiUrl": "%s(apiUrl)",
+  "password": "%s(password)",
+  "tags": "",
+  "customFields": "",
+  "status": "open",
+  "subject": "Create Optional Subject",
+  "problemId": "",
+  "forumTopicId": "",
+  "requesterId": "",
+  "organizationId": "%s(organizationId)",
+  "type": "task",
+  "externalId": "testExternalId",
+  "dueAt": "%s(dueAt)",
+  "submitterId": "",
+  "groupId": "%s(groupId)",
+  "assigneeId": "",
+  "priority": "high",
+  "commentType": "",
+  "commentBody": "Create Optional Comment",
+  "commentIsPublic": "",
+  "commentHtmlBody": "",
+  "commentAttachments": "",
+  "collaboratorIds": [
+    "%s(collaboratorId)"
+  ],
+  "collaborators": "",
+  "viaFollowupSourceId": "",
+  "ticketFormId": ""
+}
