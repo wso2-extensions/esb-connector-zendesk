@@ -37,7 +37,7 @@
         </script>
         <call>
             <endpoint>
-                <http method="put"
+                <http method="post"
                       uri-template="{uri.var.apiUrl}/api/v2/{uri.var.componentType}/{uri.var.componentId}/tags.json"/>
             </endpoint>
         </call>
