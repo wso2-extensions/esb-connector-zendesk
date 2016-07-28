@@ -11,7 +11,7 @@ Tested Platform:
 
  - Microsoft WINDOWS V-7
  - UBUNTU 13.04
- - WSO2 ESB 4.9.0
+ - WSO2 ESB 4.9.0,5.0.0-BETA
  - Java 1.7
 
 Steps to follow in setting integration test.
@@ -25,8 +25,8 @@ Steps to follow in setting integration test.
 		(Note the apiURl for further use. "https://{company}.zendesk.com" )
 	iii) When you send the request you have to save username, password and API URL.     
  
- 2. Download ESB WSO2 ESB 4.9.0 by navigating the following the URL: http://svn.wso2.org/repos/wso2/people/malaka/ESB/beta/.
- 
+ 2. Download ESB 5.0.0-BETA and add "-XX:-UseSplitVerifier" under $JVM_MEM_OPTS into {ESB_HOME}/bin/wso2server.sh".
+
  3.	Deploy relevant patches, if applicable.
  
  4. Follow the below mentioned steps for adding valid certificate to access Zendesk API over https
