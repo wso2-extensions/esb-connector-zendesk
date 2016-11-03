@@ -11,7 +11,7 @@ Tested Platform:
 
  - Microsoft WINDOWS V-7
  - UBUNTU 13.04
- - WSO2 ESB 4.9.0,5.0.0-BETA
+ - WSO2 ESB 4.9.0,5.0.0
  - Java 1.7
 
 Steps to follow in setting integration test.
@@ -25,7 +25,7 @@ Steps to follow in setting integration test.
 		(Note the apiURl for further use. "https://{company}.zendesk.com" )
 	iii) When you send the request you have to save username, password and API URL.     
  
- 2. Download ESB 5.0.0-BETA and add "-XX:-UseSplitVerifier" under $JVM_MEM_OPTS into {ESB_HOME}/bin/wso2server.sh".
+ 2. Download ESB 5.0.0 and add "-XX:-UseSplitVerifier" under $JVM_MEM_OPTS into {ESB_HOME}/bin/wso2server.sh".
 
  3.	Deploy relevant patches, if applicable.
  
@@ -38,7 +38,7 @@ Steps to follow in setting integration test.
 		NOTE : CERT_FILE_NAME is the file name which was extracted from zendesk, change it accordingly. (e.g. -.zendesk.com)
 			   CERT_NAME is name of the certificate. (e.g. zendesk)
 	   
-	iii) Go to ESB 4.9.0-BETA-SNAPSHOT folder and place the downloaded certificate in "<ESB_HOME>/repository/resources/security/"
+	iii) Go to ESB 5.0.0 folder and place the downloaded certificate in "<ESB_HOME>/repository/resources/security/"
 
 	iv) Navigate to "<ESB_HOME>/repository/resources/security/" using command prompt and execute keytool -importcert -file CERT_FILE_NAME -keystore client-truststore.jks -alias "CERT_NAME" in command line to import Zendesk certificate in to keystore. Give "wso2carbon" as password.
 		NOTE : CERT_FILE_NAME is the file name which was extracted from zendesk, change it accordingly. (e.g. -.zendesk.com)
@@ -51,7 +51,7 @@ Steps to follow in setting integration test.
 		<messageBuilder contentType="image/gif" class="org.wso2.carbon.relay.BinaryRelayBuilder" />
 		<messageFormatter contentType="image/gif" class="org.wso2.carbon.relay.ExpandingMessageFormatter" />
 		
- 7. Compress modified ESB as wso2esb-4.9.0.zip and copy that zip file in to location "{Connector_Home}/repository/".
+ 7. Compress modified ESB as wso2esb-5.0.0.zip and copy that zip file in to location "{Connector_Home}/repository/".
  
  8. Update the 'zendesk.properties' file at the location "{ZENDESK_CONNECTOR_HOME}/src/test/resources/artifacts/ESB/connector/config/" as below.
    	 i) 	apiUrl						-		Use the api url, step 1->(iii)
