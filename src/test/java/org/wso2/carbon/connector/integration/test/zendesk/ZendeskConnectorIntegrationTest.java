@@ -49,7 +49,7 @@ public class ZendeskConnectorIntegrationTest extends ConnectorIntegrationTestBas
     @BeforeClass(alwaysRun = true)
     public void setEnvironment() throws Exception {
 
-        init("zendesk-connector-1.0.2-SNAPSHOT");
+        init("zendesk-connector-1.0.3-SNAPSHOT");
 
         esbRequestHeadersMap.put("Content-Type", "application/json");
         apiRequestHeadersMap.putAll(esbRequestHeadersMap);

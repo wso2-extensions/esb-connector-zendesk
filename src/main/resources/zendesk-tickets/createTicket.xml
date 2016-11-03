@@ -108,10 +108,9 @@
          var commentHtmlBody = mc.getProperty('uri.var.commentHtmlBody');
          var commentAttachments = mc.getProperty('uri.var.commentAttachments');
          payload.ticket = new Object(); 			
-         payload.ticket.comment = new Object();		
-         if(commentBody != null && commentBody != ""){
-            payload.ticket.comment.body = commentBody;
-         }
+         payload.ticket.comment = new Object();
+         payload.ticket.comment.body = commentBody;
+
          if(commentIsPublic != null && commentIsPublic != ""){
             payload.ticket.comment["public"] = commentIsPublic;
          }
