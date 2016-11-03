@@ -25,7 +25,8 @@ Steps to follow in setting integration test.
 		(Note the apiURl for further use. "https://{company}.zendesk.com" )
 	iii) When you send the request you have to save username, password and API URL.     
  
- 2. Download ESB 5.0.0 and add "-XX:-UseSplitVerifier" under $JVM_MEM_OPTS into {ESB_HOME}/bin/wso2server.sh".
+ 2. Download ESB 5.0.0 and add "-noverify \" under $JVM_MEM_OPTS into {ESB_HOME}/bin/wso2server.sh".
+    (if using ESB 4.9.0 and "-XX:-UseSplitVerifier" under $JVM_MEM_OPTS into {ESB_HOME}/bin/wso2server.sh".)
 
  3.	Deploy relevant patches, if applicable.
  
