@@ -9,7 +9,6 @@
         <listener class-name="org.wso2.carbon.automation.engine.testlisteners.TestReportListener"/>
     </listeners>
     <test name="Zendesk-Connector-Test" preserve-order="true" verbose="2">
-
         <classes>
             <class name="org.wso2.carbon.connector.integration.test.zendesk.ZendeskConnectorIntegrationTest"/>
         </classes>
