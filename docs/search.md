@@ -1,4 +1,4 @@
-# Working with Project Jobs in Zendesk
+# Working with Search in Zendesk
 
 [[  Overview ]](#overview)  [[ Operation details ]](#operation-details)  [[  Sample configuration  ]](#sample-configuration)
 

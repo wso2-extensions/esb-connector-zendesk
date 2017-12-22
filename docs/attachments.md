@@ -1,4 +1,4 @@
-# Working with Project Jobs in Zendesk
+# Working with Attachments in Zendesk
 
 [[  Overview ]](#overview)  [[ Operation details ]](#operation-details)  [[  Sample configuration  ]](#sample-configuration)
 
@@ -106,7 +106,7 @@ https://developer.zendesk.com/rest_api/docs/core/attachments#deleting-uploads
 
 #### Sample configuration
 
-Following is a sample proxy service that illustrates how to connect to Zendesk with the init operation, and then use the createJob operation. The sample request for this proxy can be found in the getAttachment sample request. You can use this sample as a template for using other operations in this category.
+Following is a sample proxy service that illustrates how to connect to Zendesk with the init operation, and then use the getAttachment operation. The sample request for this proxy can be found in the getAttachment sample request. You can use this sample as a template for using other operations in this category.
 ```xml
 As a best practice, create a separate sequence for handling the response payload for errors. In the following sample, this sequence is "faultHandlerSeq".
 ```
