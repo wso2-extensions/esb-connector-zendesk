@@ -1,6 +1,6 @@
 ### Zendesk ESB Connector
 
-The Zendesk connector allows you to access the exposed Zendesk v2 API through the WSO2 ESB. Many businesses use the Zendesk API to automate and enhance their customer support. 
+The Zendesk connector allows you to access the exposed Zendesk v2 API through the WSO2 EI. Many businesses use the Zendesk API to automate and enhance their customer support. 
 
 ### Build
 mvn clean install

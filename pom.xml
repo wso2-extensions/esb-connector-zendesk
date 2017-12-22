@@ -41,6 +41,7 @@
         <bouncycastle.version>1.55</bouncycastle.version>
         <rampart.apache.version>1.6.1-wso2v18</rampart.apache.version>
         <rampart.wso2.version>1.6.1.wso2v18</rampart.wso2.version>
+        <skip-tests>true</skip-tests>
     </properties>
     <dependencies>
         <dependency>
@@ -282,6 +283,7 @@
                         </property>
                     </systemProperties>
                     <workingDirectory>${basedir}/target</workingDirectory>
+                    <skipTests>${skip-tests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>
