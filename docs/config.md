@@ -29,18 +29,18 @@ Follow the instructions below to import your Zendesk certificate to access the Z
     ```
     Provide **wso2carbon** as the password.
 3.  Please ensure that the following Axis2 configurations are added and enabled in the <EI_HOME>\conf\axis2\axis2.xml file.
-Required message formatters
+    Required message formatters
 
-**messageFormatters**
-```xml
-<messageFormatter contentType="image/gif" class="org.wso2.carbon.relay.ExpandingMessageFormatter" />
-```
-Required message builders
+    **messageFormatters**
+    ```xml
+    <messageFormatter contentType="image/gif" class="org.wso2.carbon.relay.ExpandingMessageFormatter" />
+    ```
+    Required message builders
 
-**messageBuilders**
-```xml
-<messageBuilder contentType="image/gif" class="org.wso2.carbon.relay.BinaryRelayBuilder" />
-```
+        **messageBuilders**
+    ```xml
+    <messageBuilder contentType="image/gif" class="org.wso2.carbon.relay.BinaryRelayBuilder" />
+    ```
 
 ## Initializing the Connector
 Specify the init method as follows:
