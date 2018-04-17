@@ -288,7 +288,7 @@ public class ZendeskConnectorIntegrationTest extends ConnectorIntegrationTestBas
                 sendJsonRestRequest(connectorProperties.getProperty("invalidApiUrl") + "/api/v2/tickets.json", "GET",
                         apiRequestHeadersMap);
 
-        Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
+        Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 404);
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), apiRestResponse.getHttpStatusCode());
         Assert.assertEquals(apiRestResponse.getBody().getString("error"), esbRestResponse.getBody().getString("error"));
 
@@ -474,7 +474,7 @@ public class ZendeskConnectorIntegrationTest extends ConnectorIntegrationTestBas
                 sendJsonRestRequest(connectorProperties.getProperty("invalidApiUrl") + "/api/v2/tickets/recent.json",
                         "GET", apiRequestHeadersMap);
 
-        Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
+        Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 404);
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), apiRestResponse.getHttpStatusCode());
         Assert.assertEquals(apiRestResponse.getBody().getString("error"), esbRestResponse
                 .getBody().getString("error"));
