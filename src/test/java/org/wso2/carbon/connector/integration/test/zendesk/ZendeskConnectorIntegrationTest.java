@@ -49,7 +49,9 @@ public class ZendeskConnectorIntegrationTest extends ConnectorIntegrationTestBas
     @BeforeClass(alwaysRun = true)
     public void setEnvironment() throws Exception {
 
-        init("zendesk-connector-1.0.3-SNAPSHOT");
+        String connectorName = System.getProperty("connector_name") + "-connector-" +
+                System.getProperty("connector_version") + ".zip";
+        init(connectorName);
 
         esbRequestHeadersMap.put("Content-Type", "application/json");
         apiRequestHeadersMap.putAll(esbRequestHeadersMap);
@@ -288,8 +290,7 @@ public class ZendeskConnectorIntegrationTest extends ConnectorIntegrationTestBas
 
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 404);
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), apiRestResponse.getHttpStatusCode());
-        Assert.assertEquals(apiRestResponse.getBody().getJSONObject("error").getString("title"), esbRestResponse
-                .getBody().getJSONObject("error").getString("title"));
+        Assert.assertEquals(apiRestResponse.getBody().getString("error"), esbRestResponse.getBody().getString("error"));
 
     }
 
@@ -475,8 +476,8 @@ public class ZendeskConnectorIntegrationTest extends ConnectorIntegrationTestBas
 
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 404);
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), apiRestResponse.getHttpStatusCode());
-        Assert.assertEquals(apiRestResponse.getBody().getJSONObject("error").getString("title"), esbRestResponse
-                .getBody().getJSONObject("error").getString("title"));
+        Assert.assertEquals(apiRestResponse.getBody().getString("error"), esbRestResponse
+                .getBody().getString("error"));
     }
 
     /**
@@ -654,7 +655,7 @@ public class ZendeskConnectorIntegrationTest extends ConnectorIntegrationTestBas
                         parametersMap);
 
         RestResponse<JSONObject> apiRestResponse =
-                sendJsonRestRequest(connectorProperties.getProperty("apiUrl") + "/api/v2/tickets/show_many.json", "POST",
+                sendJsonRestRequest(connectorProperties.getProperty("apiUrl") + "/api/v2/tickets/show_many.json?ids=" + ticketIds.toString(), "POST",
                         apiRequestHeadersMap);
 
         // Count element should be 0 when no value is passed for ids. Asserting it to 0
