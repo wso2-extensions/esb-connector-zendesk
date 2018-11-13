@@ -35,20 +35,31 @@ Following is a sample request that can be handled by the addTags operation.
     "tags":["testTag123"]
 }
 ```
-**Related Zendesk documentation**
+**Sample response**
 
+Given below is a sample response for the addTags operation.
+
+```json
+{
+  "tags": [
+    "important",
+    "customer"
+  ]
+}
+```
+
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/tags#add-tags
 
-#### Sample configuration
+### Sample configuration
 
-Following is a sample proxy service that illustrates how to connect to Zendesk with the init operation, and then use the addTags operation. The sample request for this proxy can be found in the addTags sample request.
-```xml
-As a best practice, create a separate sequence for handling the response payload for errors. In the following sample, this sequence is "faultHandlerSeq".
-```
-**Sample Proxy**
+Following example illustrates how to connect to Zendesk with the init operation and addTags operation.
+
+1. Create a sample proxy as below :
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy xmlns="http://ws.apache.org/ns/synapse" name="zendesk_addTags" transports="https,http" statistics="disable"
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="addTags" transports="https,http" statistics="disable"
    trace="disable" startOnLoad="true">
    <target>
       <inSequence onError="faultHandlerSeq">
@@ -68,43 +79,6 @@ As a best practice, create a separate sequence for handling the response payload
             <componentType>{$ctx:componentType}</componentType>
             <tags>{$ctx:tags}</tags>
          </zendesk.addTags>
-         <filter source="$axis2:HTTP_SC" regex="^[^2][0-9][0-9]">
-            <then>
-               <switch source="$axis2:HTTP_SC">
-                  <case regex="401">
-                     <property name="ERROR_CODE" value="600401" />
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)" />
-                     <property name="error_description" expression="json-eval($.description)" />
-                  </case>
-                  <case regex="404">
-                     <property name="ERROR_CODE" value="600404" />
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)" />
-                     <property name="error_description" expression="json-eval($.description)" />
-                  </case>
-                  <case regex="403">
-                     <property name="ERROR_CODE" value="600403" />
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)" />
-                     <property name="error_description" expression="json-eval($.description)" />
-                  </case>
-                  <case regex="400">
-                     <property name="ERROR_CODE" value="600400" />
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)" />
-                     <property name="error_description" expression="json-eval($.description)" />
-                  </case>
-                  <case regex="500">
-                     <property name="ERROR_CODE" value="600500" />
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)" />
-                     <property name="error_description" expression="json-eval($.description)" />
-                  </case>
-                  <default>
-                     <property name="ERROR_CODE" expression="$axis2:HTTP_SC" />
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)" />
-                     <property name="error_description" expression="json-eval($.description)" />
-                  </default>
-               </switch>
-               <sequence key="faultHandlerSeq" />
-            </then>
-         </filter>
          <respond />
       </inSequence>
       <outSequence>
@@ -113,4 +87,34 @@ As a best practice, create a separate sequence for handling the response payload
    </target>
    <description />
 </proxy>
+```
+2. Create a json file named addTags.json and copy the configurations given below to it:
+
+```json
+{
+    "username":"apptest.mahesh@gmail.com",
+    "apiUrl":"https://abc387.zendesk.com",
+    "password":"Colombo123",
+    "componentType":"tickets",
+    "componentId":"19",
+    "tags":["testTag123"]
+}
+```
+3. Replace the credentials with your values.
+
+4. Execute the following curl command:
+
+```bash
+curl http://localhost:8280/services/addTags -H "Content-Type: application/json" -d @addTags.json
+```
+
+5. Zendesk returns a json response similar to the one shown below:
+ 
+```json
+{
+  "tags": [
+    "important",
+    "customer"
+  ]
+}
 ```

@@ -4,7 +4,6 @@
 
 ### Overview 
 
-
 The search operation allows to search for tickets, users, organizations, and forum topics. 
 
 **search**
@@ -35,20 +34,50 @@ Following is a sample request that can be handled by the search operation.
     "sortBy":"created_at"
 } 
 ```
-**Related Zendesk documentation**
 
+**Sample response**
+
+Given below is a sample response for the search operation.
+
+```json
+{
+  "results": [
+    {
+      "name":        "Hello DJs",
+      "created_at":  "2009-05-13T00:07:08Z",
+      "updated_at":  "2011-07-22T00:11:12Z",
+      "id":          211,
+      "result_type": "group"
+      "url":         "https://foo.zendesk.com/api/v2/groups/211.json"
+    },
+    {
+      "name":        "Hello MCs",
+      "created_at":  "2009-08-26T00:07:08Z",
+      "updated_at":  "2010-05-13T00:07:08Z",
+      "id":          122,
+      "result_type": "group"
+      "url":         "https://foo.zendesk.com/api/v2/groups/122.json"
+    },
+    ...
+  ],
+  "facets":    null,
+  "next_page": "https://foo.zendesk.com/api/v2/search.json?query=\"type:Group hello\"&sort_by=created_at&sort_order=desc&page=2",
+  "prev_page": null,
+  "count":     1234
+}
+```
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/search#search
 
-#### Sample configuration
+### Sample configuration
 
-Following is a sample proxy service that illustrates how to connect to Zendesk with the init operation, and then use the search operation. The sample request for this proxy can be found in the search sample request.
-```xml
-As a best practice, create a separate sequence for handling the response payload for errors. In the following sample, this sequence is "faultHandlerSeq".
-```
-**Sample Proxy**
+Following example illustrates how to connect to Zendesk with the init operation and search operation.
+
+1. Create a sample proxy as below :
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy xmlns="http://ws.apache.org/ns/synapse" name="zendesk_search" transports="https" statistics="disable" trace="disable" startOnLoad="true">
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="search" transports="https" statistics="disable" trace="disable" startOnLoad="true">
      <target>
      <inSequence onError="faultHandlerSeq">
       <property name="username" expression="json-eval($.username)"/>
@@ -67,44 +96,7 @@ As a best practice, create a separate sequence for handling the response payload
          <sortOrder>{$ctx:sortOrder}</sortOrder>
          <query>{$ctx:query}</query>
       </zendesk.search>
-       <filter source="$axis2:HTTP_SC" regex="^[^2][0-9][0-9]">
-            <then>
-               <switch source="$axis2:HTTP_SC">
-                 <case regex="401">
-                     <property name="ERROR_CODE" value="600401"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="404">
-                     <property name="ERROR_CODE" value="600404"/>                  
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="403">
-                     <property name="ERROR_CODE" value="600403"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>              
-                  <case regex="400">
-                     <property name="ERROR_CODE" value="600400"/>         
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="500">
-                     <property name="ERROR_CODE" value="600500"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <default>
-                     <property name="ERROR_CODE" expression="$axis2:HTTP_SC"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </default>
-               </switch>
-               <sequence key="faultHandlerSeq"/>
-            </then>
-         </filter>
-         <respond/>
+      <respond/>
      </inSequence>
       <outSequence>
         <send/>
@@ -112,4 +104,54 @@ As a best practice, create a separate sequence for handling the response payload
      </target>
    <description/>
   </proxy>
+```
+
+2. Create a json file named search.json and copy the configurations given below to it:
+
+```json
+{
+    "username":"wso2connector.user@gmail.com",
+    "apiUrl":"https://wso2connector.zendesk.com",
+    "password":"1qaz2wsx@",
+    "query":"\"status>unsolved+requester:wso2connector.user@gmail.com+type:ticket\"",
+    "sortOrder":"asc",
+    "sortBy":"created_at"
+}
+```
+3. Replace the credentials with your values.
+
+4. Execute the following curl command:
+
+```bash
+curl http://localhost:8280/services/search -H "Content-Type: application/json" -d @search.json
+```
+
+5. Zendesk returns a json response similar to the one shown below:
+ 
+```json
+{
+  "results": [
+    {
+      "name":        "Hello DJs",
+      "created_at":  "2009-05-13T00:07:08Z",
+      "updated_at":  "2011-07-22T00:11:12Z",
+      "id":          211,
+      "result_type": "group"
+      "url":         "https://foo.zendesk.com/api/v2/groups/211.json"
+    },
+    {
+      "name":        "Hello MCs",
+      "created_at":  "2009-08-26T00:07:08Z",
+      "updated_at":  "2010-05-13T00:07:08Z",
+      "id":          122,
+      "result_type": "group"
+      "url":         "https://foo.zendesk.com/api/v2/groups/122.json"
+    },
+    ...
+  ],
+  "facets":    null,
+  "next_page": "https://foo.zendesk.com/api/v2/search.json?query=\"type:Group hello\"&sort_by=created_at&sort_order=desc&page=2",
+  "prev_page": null,
+  "count":     1234
+}
 ```
