@@ -42,9 +42,24 @@ Following is a sample request that can be handled by the getAttachment operation
     "attachmentId":"968683092"
 }
 ```
+**Sample response**
 
+Given below is a sample response for the getAttachment operation.
+
+```json
+{
+  "attachment": {
+    "id":           498483,
+    "name":         "myfile.dat",
+    "content_url":  "https://company.zendesk.com/attachments/myfile.dat",
+    "content_type": "application/binary",
+    "size":         2532,
+    "thumbnails":   [],
+    "url":          "https://company.zendesk.com/api/v2/attachments/498483.json",
+  }
+}
+```
 **Related Zendesk documentation**
-
 https://developer.zendesk.com/rest_api/docs/core/attachments#getting-attachments
 
 ####  Uploading files
@@ -70,8 +85,38 @@ Following is a sample request that can be handled by the uploadFiles operation.
 ```xml
 http://localhost:8280/services/zendesk_uploadFiles?apiUrl=https://wso2connector.zendesk.com&username=wso2connector.user@gmail.com&password=1qaz2wsx@&fileName=picture.png&token=End7UhffGumiS7JoH2B4hGeHupX
 ```
-**Related Zendesk documentation**
+**Sample response**
 
+Given below is a sample response for the uploadFiles operation.
+
+```json
+{
+  "upload": {
+    "token": "6bk3gql82em5nmf",
+    "attachment": {
+      "id":           498483,
+      "name":         "crash.log",
+      "content_url":  "https://company.zendesk.com/attachments/crash.log",
+      "content_type": "text/plain",
+      "size":         2532,
+      "thumbnails":   []
+    },
+    "attachments": [
+      {
+        "id":           498483,
+        "name":         "crash.log",
+        "content_url":  "https://company.zendesk.com/attachments/crash.log",
+        "content_type": "text/plain",
+        "size":         2532,
+        "thumbnails":   []
+      }
+    ]
+  }
+}
+
+```
+
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/attachments#uploading-files
 
 ####  Deleting an upload
@@ -101,19 +146,18 @@ Following is a sample request that can be handled by the deleteUpload operation.
 }
 ```
 **Related Zendesk documentation**
-
 https://developer.zendesk.com/rest_api/docs/core/attachments#deleting-uploads
 
 #### Sample configuration
 
-Following is a sample proxy service that illustrates how to connect to Zendesk with the init operation, and then use the getAttachment operation. The sample request for this proxy can be found in the getAttachment sample request. You can use this sample as a template for using other operations in this category.
-```xml
-As a best practice, create a separate sequence for handling the response payload for errors. In the following sample, this sequence is "faultHandlerSeq".
-```
+Following example illustrates how to connect to Zendesk with the init operation and getAttachment operation.
+
+1. Create a sample proxy as below :
+
 **Sample Proxy**
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy xmlns="http://ws.apache.org/ns/synapse" name="zendesk_getAttachment" transports="https" statistics="disable" trace="disable" startOnLoad="true">
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="getAttachment" transports="https" statistics="disable" trace="disable" startOnLoad="true">
      <target>
      <inSequence onError="faultHandlerSeq">
       <property name="username" expression="json-eval($.username)"/>
@@ -128,44 +172,7 @@ As a best practice, create a separate sequence for handling the response payload
       <zendesk.getAttachment>
          <attachmentId>{$ctx:attachmentId}</attachmentId>
       </zendesk.getAttachment>
-      <filter source="$axis2:HTTP_SC" regex="^[^2][0-9][0-9]">
-            <then>
-               <switch source="$axis2:HTTP_SC">
-                 <case regex="401">
-                     <property name="ERROR_CODE" value="600401"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="404">
-                     <property name="ERROR_CODE" value="600404"/>                  
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="403">
-                     <property name="ERROR_CODE" value="600403"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>              
-                  <case regex="400">
-                     <property name="ERROR_CODE" value="600400"/>         
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="500">
-                     <property name="ERROR_CODE" value="600500"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <default>
-                     <property name="ERROR_CODE" expression="$axis2:HTTP_SC"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </default>
-               </switch>
-               <sequence key="faultHandlerSeq"/>
-            </then>
-         </filter>
-         <respond/>
+      <respond/>
      </inSequence>
       <outSequence>
        <send/>
@@ -173,4 +180,37 @@ As a best practice, create a separate sequence for handling the response payload
      </target>
    <description/>
   </proxy>
+```
+2. Create a json file named getAttachment.json and copy the configurations given below to it:
+
+```json
+{
+    "username":"dilanijtest2@gmail.com",
+    "apiUrl":"https://dilanijtest2.zendesk.com",
+    "password":"1qaz2wsx@",
+    "attachmentId":"968683092"
+}
+```
+3. Replace the credentials with your values.
+
+4. Execute the following curl command:
+
+```bash
+curl http://localhost:8280/services/getAttachment -H "Content-Type: application/json" -d @getAttachment.json
+```
+
+5. Zendesk returns a json response similar to the one shown below:
+ 
+```json
+{
+  "attachment": {
+    "id":           498483,
+    "name":         "myfile.dat",
+    "content_url":  "https://company.zendesk.com/attachments/myfile.dat",
+    "content_type": "application/binary",
+    "size":         2532,
+    "thumbnails":   [],
+    "url":          "https://company.zendesk.com/api/v2/attachments/498483.json",
+  }
+}
 ```

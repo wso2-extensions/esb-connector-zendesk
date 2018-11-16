@@ -1,6 +1,8 @@
 # Configuring Zendesk Operations
 
-[[Initializing the Connector]](#initializing-the-connector)  [[Obtaining user credentials]](#obtaining-user-credentials)
+[[Prerequisites]](#Prerequisites) [[Initializing the Connector]](#initializing-the-connector)
+
+## Prerequisites
 
 > NOTE: To work with the Zendesk connector, you need to have a Zendesk account. If you do not have a Zendesk account, go to [https://www.zendesk.com/register#getstarted](https://www.zendesk.com/register#getstarted) and create a Zendesk account.
 
@@ -8,17 +10,14 @@ To use the Zendesk connector, add the <zendesk.init> element in your configurati
 
 Zendesk uses basic access authentication where user provides username and password.
 
-
-
-
-## Using the Zendesk API
+### Using the Zendesk API
 
 * **Follow the steps below to using the Zendesk API:**
 
     1. Requests to connect to the Zendesk API can be done only by a [verified user](https://support.zendesk.com/hc/en-us/articles/203663786-Verifying-a-user-s-email-address). 
         * For additional information on the authentication process refer [here](https://developer.zendesk.com/rest_api/docs/core/introduction#security-and-authentication).
 
-## Configuring ESB
+### Importing the Zendesk Certificate
 
 Follow the instructions below to import your Zendesk certificate to access the Zendesk API over https:
 
@@ -28,19 +27,6 @@ Follow the instructions below to import your Zendesk certificate to access the Z
     keytool -importcert -file zendesk.crt -keystore client-truststore.jks -alias zendesk
     ```
     Provide **wso2carbon** as the password.
-3.  Please ensure that the following Axis2 configurations are added and enabled in the <EI_HOME>\conf\axis2\axis2.xml file.
-    Required message formatters
-
-    **messageFormatters**
-    ```xml
-    <messageFormatter contentType="image/gif" class="org.wso2.carbon.relay.ExpandingMessageFormatter" />
-    ```
-    Required message builders
-
-        **messageBuilders**
-    ```xml
-    <messageBuilder contentType="image/gif" class="org.wso2.carbon.relay.BinaryRelayBuilder" />
-    ```
 
 ## Initializing the Connector
 Specify the init method as follows:

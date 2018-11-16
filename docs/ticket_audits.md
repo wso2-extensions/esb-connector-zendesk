@@ -35,20 +35,86 @@ Following is a sample request that can be handled by the listTicketAudits operat
     "ticketId":"123"
 }
 ```
-**Related Zendesk documentation**
+**Sample response**
 
+Given below is a sample response for the listTicketAudits operation.
+
+```json
+{
+  "audits": [
+    {
+      "created_at": "2011-09-25T22:35:44Z",
+      "via": {
+        "channel": "web"
+      },
+      "metadata": {
+        "system": {
+          "location": "San Francisco, CA, United States",
+          "client": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.186 Safari/535.1",
+          "ip_address": "76.218.201.212"
+        },
+        "custom": {
+        }
+      },
+      "id": 2127301143,
+      "ticket_id": 666,
+      "events": [
+        {
+          "html_body": "<p>This is a new private comment</p>",
+          "public": false,
+          "body": "This is a new private comment",
+          "id": 2127301148,
+          "type": "Comment",
+          "attachments": [
+          ]
+        },
+        {
+          "via": {
+            "channel": "rule",
+            "source": {
+              "to": { },
+              "from": {
+                "id": 35079792,
+                "title": "Assign to first responder"
+              },
+              "rel": "trigger"
+            }
+          },
+          "id": 2127301163,
+          "value": "open",
+          "type": "Change",
+          "previous_value": "new",
+          "field_name": "status"
+        }
+      ],
+      "author_id": 5246746
+    },
+    ...
+    {
+      ...
+      "events": [
+        ...
+      ],
+    }
+  ],
+  "next_page": null,
+  "previous_page": null,
+  "count": 5
+}
+```
+
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/ticket_audits#listing-audits
 
-#### Sample configuration
+### Sample configuration
 
-Following is a sample proxy service that illustrates how to connect to Zendesk with the init operation, and then use the listTicketAudits operation. The sample request for this proxy can be found in the listTicketAudits sample request.
-```xml
-As a best practice, create a separate sequence for handling the response payload for errors. In the following sample, this sequence is "faultHandlerSeq".
-```
 **Sample Proxy**
+Following example illustrates how to connect to Zendesk with the init operation and listTicketAudits operation.
+
+1. Create a sample proxy as below :
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy xmlns="http://ws.apache.org/ns/synapse" name="zendesk_listTicketAudits" transports="https" statistics="disable" trace="disable" startOnLoad="true">
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="listTicketAudits" transports="https" statistics="disable" trace="disable" startOnLoad="true">
      <target>
      <inSequence onError="faultHandlerSeq" >
       <property name="username" expression="json-eval($.username)"/>
@@ -63,44 +129,7 @@ As a best practice, create a separate sequence for handling the response payload
       <zendesk.listTicketAudits>
          <ticketId>{$ctx:ticketId}</ticketId>
       </zendesk.listTicketAudits>
-       <filter source="$axis2:HTTP_SC" regex="^[^2][0-9][0-9]">
-            <then>
-               <switch source="$axis2:HTTP_SC">
-                 <case regex="401">
-                     <property name="ERROR_CODE" value="600401"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="404">
-                     <property name="ERROR_CODE" value="600404"/>                  
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="403">
-                     <property name="ERROR_CODE" value="600403"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>              
-                  <case regex="400">
-                     <property name="ERROR_CODE" value="600400"/>         
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="500">
-                     <property name="ERROR_CODE" value="600500"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <default>
-                     <property name="ERROR_CODE" expression="$axis2:HTTP_SC"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </default>
-               </switch>
-               <sequence key="faultHandlerSeq"/>
-            </then>
-         </filter>
-         <respond/>
+      <respond/>
      </inSequence>
       <outSequence>
         <send/>
@@ -108,4 +137,87 @@ As a best practice, create a separate sequence for handling the response payload
      </target>
    <description/>
   </proxy>
+```
+2. Create a json file named listTicketAudits.json and copy the configurations given below to it:
+
+```json
+{
+    "username":"wso2connector.user@gmail.com",
+    "apiUrl":"https://wso2connector.zendesk.com",
+    "password":"1qaz2wsx@",
+    "ticketId":"123"
+}
+```
+3. Replace the credentials with your values.
+
+4. Execute the following curl command:
+
+```bash
+curl http://localhost:8280/services/listTicketAudits -H "Content-Type: application/json" -d @listTicketAudits.json
+```
+
+5. Zendesk returns a json response similar to the one shown below:
+ 
+```json
+{
+  "audits": [
+    {
+      "created_at": "2011-09-25T22:35:44Z",
+      "via": {
+        "channel": "web"
+      },
+      "metadata": {
+        "system": {
+          "location": "San Francisco, CA, United States",
+          "client": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.186 Safari/535.1",
+          "ip_address": "76.218.201.212"
+        },
+        "custom": {
+        }
+      },
+      "id": 2127301143,
+      "ticket_id": 666,
+      "events": [
+        {
+          "html_body": "<p>This is a new private comment</p>",
+          "public": false,
+          "body": "This is a new private comment",
+          "id": 2127301148,
+          "type": "Comment",
+          "attachments": [
+          ]
+        },
+        {
+          "via": {
+            "channel": "rule",
+            "source": {
+              "to": { },
+              "from": {
+                "id": 35079792,
+                "title": "Assign to first responder"
+              },
+              "rel": "trigger"
+            }
+          },
+          "id": 2127301163,
+          "value": "open",
+          "type": "Change",
+          "previous_value": "new",
+          "field_name": "status"
+        }
+      ],
+      "author_id": 5246746
+    },
+    ...
+    {
+      ...
+      "events": [
+        ...
+      ],
+    }
+  ],
+  "next_page": null,
+  "previous_page": null,
+  "count": 5
+}
 ```

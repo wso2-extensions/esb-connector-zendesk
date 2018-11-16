@@ -95,9 +95,21 @@ Following is a sample request that can be handled by the createTicket operation.
     "collaboratorIds":""
 }
 ```
+**Sample response**
+
+Given below is a sample response for the createTicket operation.
+
+```json
+{
+  "ticket": {
+    "id":      35436,
+    "subject": "My printer is on fire!",
+    ...
+  }
+}
+```
 
 **Related Zendesk documentation**
-
 https://developer.zendesk.com/rest_api/docs/core/tickets#creating-tickets
 
 ####  Deleting a ticket
@@ -126,8 +138,8 @@ Following is a sample request that can be handled by the deleteTicket operation.
     "ticketId":"3"
 }
 ```
-**Related Zendesk documentation**
 
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/tickets#deleting-tickets
 
 ####  Updating a ticket
@@ -177,13 +189,11 @@ The udpateTicket operation allows you to update a ticket.
 * comment: Required - A comment object that describes the problem, incident, question, or task. It also allows you to add attachments in the uploads array using the tokens (IDs) received when uploading files. For more information, see [Ticket comments](https://developer.zendesk.com/rest_api/docs/core/ticket_audits#audit-events).
 * collaboratorIds: An array of the numeric IDs of agents or end users to CC on the ticket. An email notification is sent to them when the ticket is created.
 
-
 **Sample request**
 
 Following is a sample request that can be handled by the udpateTicket operation.
 
 ```json
-
 {
     "username":"wso2connector.user@gmail.com",
     "apiUrl":"https://wso2connector.zendesk.com/api/v2",
@@ -210,8 +220,26 @@ Following is a sample request that can be handled by the udpateTicket operation.
     "collaboratorIds":""
 }
 ```
-**Related Zendesk documentation**
+**Sample response**
 
+Given below is a sample response for the udpateTicket operation.
+
+```json
+{
+  "ticket": {
+     "id":      35436,
+     "subject": "My printer is on fire!",
+     "status":  "open",
+     ...
+  },
+  "audit": {
+     "events": [...],
+     ...
+  }
+}
+```
+
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/tickets#updating-tickets
 
 ####  Listing tickets
@@ -235,7 +263,6 @@ The listTickets operation allows you to list tickets. Tickets are sorted chronol
 * isRecent: Whether to return only the most recently created tickets.
 * externalId: Allows the user to pass the external ID.
 
-
 **Sample request**
 
 Following is a sample request that can be handled by the listTickets operation.
@@ -252,8 +279,28 @@ Following is a sample request that can be handled by the listTickets operation.
     "externalId":""
 }
 ```
-**Related Zendesk documentation**
+**Sample response**
 
+Given below is a sample response for the listTickets operation.
+
+```json
+{
+  "tickets": [
+    {
+      "id":      35436,
+      "subject": "Help I need somebody!",
+      ...
+    },
+    {
+      "id":      20057623,
+      "subject": "Not just anybody!",
+      ...
+    },
+    ...
+  ]
+}
+```
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/tickets#listing-tickets
 
 ####  Showing multiple tickets
@@ -282,20 +329,41 @@ Following is a sample request that can be handled by the showMultipleTickets ope
     "ticketIds":"1,2,3,4,5,6,7,8,9,10"
 }
 ```
-**Related Zendesk documentation**
+**Sample response**
 
+Given below is a sample response for the showMultipleTickets operation.
+
+```json
+{
+  "tickets": [
+    {
+      "id":      35436,
+      "subject": "Help I need somebody!",
+      ...
+    },
+    {
+      "id":      20057623,
+      "subject": "Not just anybody!",
+      ...
+    },
+    ...
+  ]
+}
+```
+
+**Related Zendesk documentation**
 https://developer.zendesk.com/rest_api/docs/core/tickets#show-multiple-tickets
 
-#### Sample configuration
+### Sample configuration
 
-Following is a sample proxy service that illustrates how to connect to Zendesk with the init operation, and then use the createTicket operation. The sample request for this proxy can be found in the createTicket sample request. You can use this sample as a template for using other operations in this category.
-```xml
-As a best practice, create a separate sequence for handling the response payload for errors. In the following sample, this sequence is "faultHandlerSeq".
-```
+Following example illustrates how to connect to Zendesk with the init operation and createTicket operation.
+
+1. Create a sample proxy as below :
+
 **Sample Proxy**
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy xmlns="http://ws.apache.org/ns/synapse" name="zendesk_createTicket" transports="https" statistics="disable" trace="disable" startOnLoad="true">
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="createTicket" transports="https" statistics="disable" trace="disable" startOnLoad="true">
      <target>
      <inSequence onError="faultHandlerSeq" >
       <property name="username" expression="json-eval($.username)"/>
@@ -342,43 +410,6 @@ As a best practice, create a separate sequence for handling the response payload
          <comment>{$ctx:comment}</comment>
          <collaboratorIds>{$ctx:collaboratorIds}</collaboratorIds>
       </zendesk.createTicket>
-      <filter source="$axis2:HTTP_SC" regex="^[^2][0-9][0-9]">
-            <then>
-               <switch source="$axis2:HTTP_SC">
-                 <case regex="401">
-                     <property name="ERROR_CODE" value="600401"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="404">
-                     <property name="ERROR_CODE" value="600404"/>                  
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="403">
-                     <property name="ERROR_CODE" value="600403"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>              
-                  <case regex="400">
-                     <property name="ERROR_CODE" value="600400"/>         
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <case regex="500">
-                     <property name="ERROR_CODE" value="600500"/> 
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </case>
-                  <default>
-                     <property name="ERROR_CODE" expression="$axis2:HTTP_SC"/>
-                     <property name="ERROR_MESSAGE" expression="json-eval($.error)"/>
-                     <property name="error_description" expression="json-eval($.description)"/>
-                  </default>
-               </switch>
-               <sequence key="faultHandlerSeq"/>
-            </then>
-         </filter>
        <respond/>
      </inSequence>
       <outSequence>
@@ -387,4 +418,53 @@ As a best practice, create a separate sequence for handling the response payload
      </target>
    <description/>
   </proxy>
+```
+
+2. Create a json file named createTicket.json and copy the configurations given below to it:
+
+```json
+{
+    "username":"wso2connector.user@gmail.com",
+    "apiUrl":"https://wso2connector.zendesk.com/api/v2",
+    "password":"1qaz2wsx@",
+    "tags":"",
+    "customFields":"",
+    "status":"",
+    "subject":"initialSubject",
+    "problemId":"",
+    "forumTopicId":"",
+    "requesterId":"",
+    "organizationId":"",
+    "type":"",
+    "externalId":"",
+    "dueAt":"",
+    "submitterId":"",
+    "groupId":"",
+    "assigneeId":"",
+    "priority":"",
+    "comment":{
+            "body":"Initial Subject",
+            "uploads":[]
+              },
+    "collaboratorIds":""
+}
+```
+3. Replace the credentials with your values.
+
+4. Execute the following curl command:
+
+```bash
+curl http://localhost:8280/services/createTicket -H "Content-Type: application/json" -d @createTicket.json
+```
+
+5. Zendesk returns a json response similar to the one shown below:
+ 
+```json
+{
+  "ticket": {
+    "id":      35436,
+    "subject": "My printer is on fire!",
+    ...
+  }
+}
 ```
