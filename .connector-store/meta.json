@@ -1,0 +1,12 @@
+{
+    "name": "Zendesk",
+    "owner": "WSO2",
+    "category": "Customer Relationship Management",
+    "documentationUrl": "https://docs.wso2.com/display/ESBCONNECTORS/Zendesk+Connector",
+    "description": "The Zendesk connector allows you to access the exposed Zendesk v2 API through the WSO2 ESB. Many businesses use the Zendesk API to automate and enhance their customer support.",
+    "status": "Active",
+    "labels": [
+        "DevTools"
+    ],
+    "releases": []
+}
